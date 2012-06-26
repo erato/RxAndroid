@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical" >
+
+          <TextView
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/textView1"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/label_drug_listing"
+              android:textAppearance="?android:attr/textAppearanceLarge" >
+          </TextView>
+
+          <ListView
+              android:id="@+id/listDrug"
+              android:layout_width="match_parent"
+              android:layout_height="360dp"
+              android:layout_weight="0.82" >
+          </ListView>
+
+          <Button
+              android:id="@+id/btnView"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/button_view" 
+              android:visibility="gone">
+          </Button>
+
+      </LinearLayout>
