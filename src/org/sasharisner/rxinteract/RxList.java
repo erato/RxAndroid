@@ -1,7 +1,9 @@
 package org.sasharisner.rxinteract;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,20 +14,18 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class RxList extends Activity {
-
     private ListView rxListView;
-    
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
 		// We'll define a custom screen layout here (the one shown above), but
 		// typically, you could just use the standard ListActivity layout.
-		setContentView(R.layout.list_item);
-		ListView rxListView = (ListView)findViewById(R.id.listDrug);
-		   
-		DBHelper db = new DBHelper(this);
-			
+		setContentView(R.layout.list_item);		
+
+		ListView rxListView = (ListView)findViewById(R.id.listDrug);		   
+		DBHelper db = new DBHelper(this);			
 		db.open();
 		String[] sDrugs = db.getDrugSelection();
 			
@@ -44,8 +44,12 @@ public class RxList extends Activity {
             btnView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View btnView) {
                     // Perform action on click
-                	//new intent to the chart screen
-                }
+                	//new intent to the chart screen                	
+                	//Intent intent = ChartFactory.getScatterChartIntent(cContextHelper, getDemoDataset(), getDemoRenderer());
+                	Intent listIntent = new Intent(getApplicationContext(), GeneratedChartDemo.class);                
+                    startActivity(listIntent);
+                } 	      
+            	
             });
         }
          
@@ -91,4 +95,6 @@ public class RxList extends Activity {
 	public void setRxListView(ListView rxListView) {
 		this.rxListView = rxListView;
 	}
+	
+
 }

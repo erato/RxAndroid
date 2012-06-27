@@ -34,5 +34,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RxList"></activity>
+		<activity android:name=".GeneratedChartDemo" />
+		<activity android:name="org.achartengine.GraphicalActivity" />
+		
     </application>
 </manifest>
