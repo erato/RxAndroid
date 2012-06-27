@@ -50,18 +50,7 @@ public class DBHelper {
         }
         return this;
     }
-    //Usage from outside
-    // AnyDBAdapter dba = new AnyDBAdapter(contextObject); //in my case contextObject is a Map
-    // dba.open();
-    // Cursor c = dba.ExampleSelect("Rawr!");
-    // contextObject.startManagingCursor(c);
-    // String s1 = "", s2 = "";
-    // if(c.moveToFirst())
-    // do {
-    //  s1 = c.getString(0);
-    //  s2 = c.getString(1);
-    //  } while (c.moveToNext());
-    // dba.close();
+ 
     public Cursor ExampleSelect(String myVariable)
     {
         String query = "SELECT locale, ? FROM android_metadata";
@@ -103,11 +92,6 @@ public class DBHelper {
        
     }
     
-    //Usage
-    // AnyDBAdatper dba = new AnyDBAdapter(contextObjecT);
-    // dba.open();
-    // dba.ExampleCommand("en-CA", "en-GB");
-    // dba.close();
     public void InsertDrugSelection(String sDrug) throws SQLException {
         String command = "INSERT INTO tDrugList VALUES ('" + sDrug + "')";
         
@@ -123,7 +107,7 @@ public class DBHelper {
     {
     	Log.i(this.toString(), "getDrugSelection");
 
-    	String query = "SELECT drug FROM tDrugList";
+    	String query = "SELECT DISTINCT drug FROM tDrugList";
     	
     	try   	{
     		Cursor cDrugs = mDb.rawQuery(query, null);
@@ -151,6 +135,52 @@ public class DBHelper {
        
     }
     
+    public String[] getDrugEffects() throws SQLException{
+    	Log.i(this.toString(), "getDrugEffects");
+    	
+    	String[] sDrugs = getDrugSelection();
+    	
+    	String query = "select distinct drug1, drug2, event_name from tRxInteract WHERE ";
+    	
+    	int i = 0; 
+    	
+    	while (i < sDrugs.length)
+    	{
+    		if (i > 0)
+    			query = query + " OR ";
+    			
+    		query = query + "(drug1 = '" + sDrugs[i] + "' or drug2 = '" + sDrugs[i] + "')";
+    		i++;
+    	}
+    		
+    	//query = query + " order by expected";
+		
+    	try{
+    		Cursor cEffects = mDb.rawQuery(query, null);
+    		
+    		if(cEffects.getCount() >0)
+ 	        {
+ 	            String[] str = new String[cEffects.getCount()];
+ 	            i = 0;
+ 	 
+ 	            while (cEffects.moveToNext())
+ 	            {
+ 	                 str[i] = cEffects.getString(cEffects.getColumnIndex("event_name"));
+ 	                 i++;
+ 	             }
+ 	            return str;
+ 	        }
+ 	        else
+ 	        {
+ 	            return new String[] {};
+ 	        }
+    		 
+	    } catch (SQLException eSQL) {
+	        throw new Error("Unable to get drug effects.");
+	    }
+				
+    	
+    }
     
     public void close() {
     	Log.i(this.toString(), "Close");
