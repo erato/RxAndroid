@@ -33,7 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RxList"></activity>
 		<activity android:name=".GeneratedChartDemo" />
 		<activity android:name="org.achartengine.GraphicalActivity" android:theme="@android:style/Theme.Black"/>
 		

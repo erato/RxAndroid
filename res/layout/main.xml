@@ -13,20 +13,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:text="@string/search_label" />
-
+            android:text="@string/search_label"
+            android:textColor="@android:color/black">            
+        </TextView>
+        
         <AutoCompleteTextView
             android:id="@+id/autocompleteDrugs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginLeft="5dp" 
+            android:layout_marginLeft="5dp"
             />
     </LinearLayout>
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/title_bar"
         android:text="@string/search_instructions"
@@ -36,7 +38,7 @@
     <ListView
         android:id="@+id/listDrug"
         android:layout_width="match_parent"
-        android:layout_height="328dp" />
+        android:layout_height="325dp" />
 
     <Button
         android:id="@+id/btnView"

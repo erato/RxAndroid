@@ -2,8 +2,8 @@ package org.sasharisner.rxinteract;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -42,11 +42,11 @@ public class RxInteract extends Activity {
     	db.open();
     	
     	String[] sDrugs = db.getAllDrugs();        
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, sDrugs);         
-        AutoCompleteTextView autoDrug;
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sDrugs);         
+        final AutoCompleteTextView autoDrug;
         autoDrug = (AutoCompleteTextView)
                  findViewById(R.id.autocompleteDrugs);  
-        
+       
         autoDrug.setAdapter(adapter);
         db.close();
         autoDrug.setCompletionHint(getString(R.string.search_hint));
@@ -63,9 +63,8 @@ public class RxInteract extends Activity {
         	    dbI.close();
         	    refreshDrugList();
         	    
-        	    adapter.setSelection(-1);
-                //Intent listIntent = new Intent(getApplicationContext(), RxList.class);                
-                //startActivity(listIntent);
+        	    autoDrug.setText("");
+        	    autoDrug.clearListSelection();
             }
         });
 
@@ -85,25 +84,30 @@ public class RxInteract extends Activity {
     	ListView rxListView = (ListView)findViewById(R.id.listDrug);		   
 
  		// Bind to our new adapter.
- 		rxListView.setAdapter(adapter);
- 		    
+ 		rxListView.setAdapter(adapter); 		
  		db.close();
+ 		
+     	Button btnView = (Button)findViewById(R.id.btnView);        	
+
  		if (sDrugs.length >= 2)
         {
-         	Button btnView = (Button)findViewById(R.id.btnView);        	
          	btnView.setVisibility(View.VISIBLE);
          	
-             btnView.setOnClickListener(new View.OnClickListener() {
+         	// Perform action on click
+            btnView.setOnClickListener(new View.OnClickListener() {
                  public void onClick(View btnView) {
-                     // Perform action on click
+                    
                  	//new intent to the chart screen                	
                  	
-                 	//Intent listIntent = new Intent(getApplicationContext(), GeneratedChartDemo.class);                
-                 	//startActivity(listIntent);
+                 	Intent listIntent = new Intent(getApplicationContext(), GeneratedChartDemo.class);                
+                 	startActivity(listIntent);
                  } 	      
              	
              });
         }
+ 		else{
+ 			btnView.setVisibility(View.GONE);
+ 		}
     }
     
     @Override
@@ -121,9 +125,6 @@ public class RxInteract extends Activity {
    	            clearList();
    	            refreshDrugList();
    	            return true;
-   	        //case R.id.itemSearch:
-   	        //    showSearch();
-   	        //    return true;
    	        default:
    	            return super.onOptionsItemSelected(item);
    	    }
@@ -135,7 +136,7 @@ public class RxInteract extends Activity {
  		DBHelper db = new DBHelper(this);			
    		db.open();
     	db.ClearDrugList();
-    	db.close();    	
+    	db.close();  
     }
 
    	

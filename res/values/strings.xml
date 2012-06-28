@@ -47,7 +47,7 @@
 	
 	<style name="RxTheme" parent="@android:style/Theme.Holo.Light">
 	    <item name="android:windowBackground">@color/white</item>
-	    <item name="android:colorBackground">@color/white</item>
+	    <item name="android:colorBackground">@color/white</item>	
 	</style>
 	
 	<string name="DB_VERSION_NUMBER">1</string>
@@ -59,5 +59,7 @@
 	<string name="y">Y</string>
 	<string name="add">Add</string>
 	<string name="new_series">New series</string>
+	
+	<color name="blue">#0000ff</color>
 	
 </resources>
