@@ -8,24 +8,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
         <TextView
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="top"
-		        android:text="@string/search_label" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:text="@string/search_label" />
+
         <AutoCompleteTextView
             android:id="@+id/autocompleteDrugs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp" 
+            />
     </LinearLayout>
-             <TextView
-		        android:id="@+id/text"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:background="@android:drawable/title_bar"
-		        android:text="@string/search_instructions"
-		        android:textColor="?android:textColorPrimary"
-		        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/title_bar"
+        android:text="@string/search_instructions"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="17dp" />
+
+    <ListView
+        android:id="@+id/listDrug"
+        android:layout_width="match_parent"
+        android:layout_height="328dp" />
+
+    <Button
+        android:id="@+id/btnView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_view"
+        android:visibility="gone" >
+    </Button>
+
 </LinearLayout>
