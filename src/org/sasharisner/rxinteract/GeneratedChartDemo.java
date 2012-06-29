@@ -15,15 +15,11 @@
  */
 package org.sasharisner.rxinteract;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Random;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.chart.PointStyle;
-import org.achartengine.chartdemo.demo.chart.IDemoChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
@@ -33,42 +29,20 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 public class GeneratedChartDemo extends ListActivity {
   private static final int SERIES_NR = 2;
-
-  private String[] mMenuText;
-
-  private String[] mMenuSummary;
 
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // I know, I know, this should go into strings.xml and accessed using
-    // getString(R.string....)
-    mMenuText = new String[] { "Line chart", "Scatter chart", "Time chart", "Bar chart" };
-    mMenuSummary = new String[] { "Line chart with randomly generated values",
-        "Scatter chart with randomly generated values",
-        "Time chart with randomly generated values", "Bar chart with randomly generated values" };
-    setListAdapter(new SimpleAdapter(this, getListValues(), android.R.layout.simple_list_item_2,
-        new String[] { IDemoChart.NAME, IDemoChart.DESC }, new int[] { android.R.id.text1, android.R.id.text2 }));
+ 
+    Intent intent = ChartFactory.getScatterChartIntent(this, getDemoDataset(), getDemoRenderer());
+    
+    startActivity(intent);
   }
 
-  private List<Map<String, String>> getListValues() {
-    List<Map<String, String>> values = new ArrayList<Map<String, String>>();
-    int length = mMenuText.length;
-    for (int i = 0; i < length; i++) {
-      Map<String, String> v = new HashMap<String, String>();
-      v.put(IDemoChart.NAME, mMenuText[i]);
-      v.put(IDemoChart.DESC, mMenuSummary[i]);
-      values.add(v);
-    }
-    return values;
-  }
 
   private XYMultipleSeriesDataset getDemoDataset() {
     XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
@@ -88,12 +62,19 @@ public class GeneratedChartDemo extends ListActivity {
     XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
     renderer.setAxisTitleTextSize(16);
     renderer.setChartTitleTextSize(20);
+    
     renderer.setLabelsTextSize(15);
     renderer.setLegendTextSize(15);
     renderer.setPointSize(5f);
+    renderer.setAxesColor(Color.WHITE);
+    
+    setChartSettings(renderer, this.getString(R.string.chart_title), this.getString(R.string.x_label), 
+    		this.getString(R.string.y_label), 0,
+            1, 0, 10, Color.BLACK, Color.BLACK, Color.WHITE);
+    
     renderer.setMargins(new int[] {20, 30, 15, 0});
     XYSeriesRenderer r = new XYSeriesRenderer();
-    r.setColor(Color.BLUE);
+    r.setColor(Color.RED);
     r.setPointStyle(PointStyle.SQUARE);
     r.setFillBelowLine(true);
     r.setFillBelowLineColor(Color.WHITE);
@@ -101,18 +82,27 @@ public class GeneratedChartDemo extends ListActivity {
     renderer.addSeriesRenderer(r);
     r = new XYSeriesRenderer();
     r.setPointStyle(PointStyle.CIRCLE);
-    r.setColor(Color.GREEN);
+    r.setColor(Color.YELLOW);
     r.setFillPoints(true);
     renderer.addSeriesRenderer(r);
-    renderer.setAxesColor(Color.DKGRAY);
-    renderer.setLabelsColor(Color.LTGRAY);
     return renderer;
   }
 
-  @Override
-  protected void onListItemClick(ListView l, View v, int position, long id) {
-    super.onListItemClick(l, v, position, id);
-    Intent intent = ChartFactory.getScatterChartIntent(this, getDemoDataset(), getDemoRenderer());
-    startActivity(intent);
+  
+  protected void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
+	      String yTitle, double xMin, double xMax, double yMin, double yMax, int axesColor,
+	      int labelsColor, int backcolor) {
+	    renderer.setChartTitle(title);
+	    renderer.setXTitle(xTitle);
+	    renderer.setYTitle(yTitle);
+	    renderer.setXAxisMin(xMin);
+	    renderer.setXAxisMax(xMax);
+	    renderer.setYAxisMin(yMin);
+	    renderer.setYAxisMax(yMax);
+	    renderer.setAxesColor(axesColor);
+	    renderer.setLabelsColor(labelsColor);
+	    renderer.setBackgroundColor(backcolor);
+	    renderer.setApplyBackgroundColor(true);
+	    //renderer.setBackgroundColor(Color.argb(100, 50, 50, 50));
   }
 }

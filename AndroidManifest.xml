@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
 		<activity android:name=".GeneratedChartDemo" />
-		<activity android:name="org.achartengine.GraphicalActivity" android:theme="@android:style/Theme.Black"/>
+		<activity android:name="org.achartengine.GraphicalActivity" android:theme="@android:style/Theme.Holo"/>
 		
     </application>
 </manifest>
