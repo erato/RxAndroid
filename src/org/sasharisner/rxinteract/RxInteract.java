@@ -99,8 +99,10 @@ public class RxInteract extends Activity {
                     
                  	//new intent to the chart screen                	
                  	
-                 	Intent listIntent = new Intent(getApplicationContext(), GeneratedChartDemo.class);                
+                 	Intent listIntent = new Intent(getApplicationContext(), Charts4jActivity.class);                
                  	startActivity(listIntent);
+                	
+                	
                  } 	      
              	
              });
