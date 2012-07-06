@@ -101,8 +101,6 @@ public class RxInteract extends Activity {
                  	
                  	Intent listIntent = new Intent(getApplicationContext(), Charts4jActivity.class);                
                  	startActivity(listIntent);
-                	
-                	
                  } 	      
              	
              });

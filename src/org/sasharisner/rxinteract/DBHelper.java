@@ -135,10 +135,11 @@ public class DBHelper {
        
     }
     
-    public String[] getDrugEffects() throws SQLException{
+    public String getDrugEffects() throws SQLException{
     	Log.i(this.toString(), "getDrugEffects");
     	
     	String[] sDrugs = getDrugSelection();
+    	String sEffects = "";
     	
     	String query = "select distinct drug1, drug2, event_name from tRxInteract WHERE ";
     	
@@ -158,28 +159,23 @@ public class DBHelper {
     	try{
     		Cursor cEffects = mDb.rawQuery(query, null);
     		
-    		if(cEffects.getCount() >0)
- 	        {
- 	            String[] str = new String[cEffects.getCount()];
+    		if(cEffects.getCount() > 0)
+ 	        { 	           
  	            i = 0;
  	 
  	            while (cEffects.moveToNext())
  	            {
- 	                 str[i] = cEffects.getString(cEffects.getColumnIndex("event_name"));
+ 	                 sEffects = sEffects + "  " +  cEffects.getString(cEffects.getColumnIndex("event_name")); 	                 
  	                 i++;
  	             }
- 	            return str;
  	        }
- 	        else
- 	        {
- 	            return new String[] {};
- 	        }
-    		 
+
+            return sEffects;
+
 	    } catch (SQLException eSQL) {
 	        throw new Error("Unable to get drug effects.");
 	    }
-				
-    	
+				    	
     }
     
     public void close() {

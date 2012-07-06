@@ -1,12 +1,7 @@
 package org.sasharisner.rxinteract;
 
-	import static com.googlecode.charts4j.Color.WHITE;
+import static com.googlecode.charts4j.Color.WHITE;
 import static com.googlecode.charts4j.UrlUtil.normalize;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.junit.BeforeClass;
 
 import com.googlecode.charts4j.AxisLabels;
 import com.googlecode.charts4j.AxisLabelsFactory;
@@ -22,21 +17,14 @@ import com.googlecode.charts4j.ScatterPlot;
 import com.googlecode.charts4j.ScatterPlotData;
 import com.googlecode.charts4j.Shape;
 
-	/**
-	 *
-	 * @author Julien Chastang (julien.c.chastang at gmail dot com)
-	 */
-	public class ScatterChartExample {
+public class Charts4jScatterChart {
 
-	    @BeforeClass
-	    public static void setUpBeforeClass() throws Exception {
-	        Logger.global.setLevel(Level.ALL);
-	    }
-
-	    
-	    public static String example1() {
-	        // EXAMPLE CODE START
+	    public static String getChartData() {
+	        
+	    	//x data
 	        Data d1 = Data.newData(10, 50, 30, 45, 65, 95, 20, 80);
+	        
+	        //y data
 	        Data d2 = Data.newData(20, 40, 40, 15, 85, 95, 80, 20);
 	        Data pointSizes = Data.newData(100, 30, 50, 75, 40, 35, 80, 100);
 	        ScatterPlotData data = Plots.newScatterPlotData(d1, d2, pointSizes);
@@ -45,7 +33,7 @@ import com.googlecode.charts4j.Shape;
 	        data.addShapeMarkers(Shape.DIAMOND, diamondColor, 30);
 	        data.setColor(diamondColor);
 	        ScatterPlot chart = GCharts.newScatterPlot(data);
-	        chart.setSize(600, 450);
+	        chart.setSize(300, 329);
 	        chart.setGrid(20, 20, 3, 2);
 
 	        AxisLabels axisLabels = AxisLabelsFactory.newNumericRangeAxisLabels(0, 100);
@@ -54,7 +42,7 @@ import com.googlecode.charts4j.Shape;
 	        chart.addXAxisLabels(axisLabels);
 	        chart.addYAxisLabels(axisLabels);
 
-	        chart.setTitle("Scatter Plot", WHITE, 16);
+	        chart.setTitle("Likelihood", WHITE, 16);
 	        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("2F3E3E")));
 	        LinearGradientFill fill = Fills.newLinearGradientFill(0, Color.newColor("3783DB"), 100);
 	        fill.addColorAndOffset(Color.newColor("9BD8F5"), 0);
@@ -63,5 +51,5 @@ import com.googlecode.charts4j.Shape;
 	       
 	        return normalize( url );
 	    }
-	}
 
+}
