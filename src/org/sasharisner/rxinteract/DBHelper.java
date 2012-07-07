@@ -135,42 +135,42 @@ public class DBHelper {
        
     }
     
-    public String getDrugEffects() throws SQLException{
+        
+    public Drug[] getDrugEffects() throws SQLException{
     	Log.i(this.toString(), "getDrugEffects");
     	
-    	String[] sDrugs = getDrugSelection();
-    	String sEffects = "";
-    	
-    	String query = "select distinct drug1, drug2, event_name from tRxInteract WHERE ";
-    	
-    	int i = 0; 
-    	
-    	while (i < sDrugs.length)
-    	{
-    		if (i > 0)
-    			query = query + " OR ";
-    			
-    		query = query + "(drug1 = '" + sDrugs[i] + "' or drug2 = '" + sDrugs[i] + "')";
-    		i++;
-    	}
-    		
+    	String query = "select distinct drug1, drug2, event_name, proportion_reporting_ratio AS likelihood, expected AS severity " +
+    			" from tRxInteract WHERE EXISTS (SELECT Null FROM tDrugList WHERE Drug = drug1 OR Drug = drug2)";
     	//query = query + " order by expected";
 		
     	try{
-    		Cursor cEffects = mDb.rawQuery(query, null);
     		
-    		if(cEffects.getCount() > 0)
- 	        { 	           
+    		Drug[] drugs = null;
+    		Cursor cEffects = mDb.rawQuery(query, null);
+
+    		int iRowCount;
+    		iRowCount = cEffects.getCount();
+    		int i;
+
+    		if(iRowCount > 0)
+ 	        {
+        		
+            	drugs = new Drug[iRowCount-1];
  	            i = 0;
  	 
  	            while (cEffects.moveToNext())
  	            {
- 	                 sEffects = sEffects + "  " +  cEffects.getString(cEffects.getColumnIndex("event_name")); 	                 
+ 	                 drugs[i].setDrug1(cEffects.getString(cEffects.getColumnIndex("drug1")));
+ 	                 drugs[i].setDrug2(cEffects.getString(cEffects.getColumnIndex("drug2")));
+ 	                 drugs[i].setEffect(cEffects.getString(cEffects.getColumnIndex("event_name"))); 	                 
+ 	                 drugs[i].setLikelihood(cEffects.getDouble(cEffects.getColumnIndex("Likelihood")));
+ 	                 drugs[i].setSeverity(cEffects.getDouble(cEffects.getColumnIndex("severity")));
+       
  	                 i++;
  	             }
  	        }
 
-            return sEffects;
+            return drugs;
 
 	    } catch (SQLException eSQL) {
 	        throw new Error("Unable to get drug effects.");

@@ -17,17 +17,17 @@ import android.widget.EditText;
 	    	
 	        WebView webView;	        
 	        webView = (WebView)findViewById(R.id.wvChart);
-	        webView.loadUrl(Charts4jScatterChart.getChartData() );
+	        webView.loadUrl(Charts4jScatterChart.getChartData(this) );
 	        	        
-	        String sEffects = "";
+	        //String sEffects = "";
 	        
-	        DBHelper db = new DBHelper(this);
-	    	db.open();
-	    	sEffects = db.getDrugEffects();
-	    	db.close();
+	        //DBHelper db = new DBHelper(this);
+	    	//db.open();
+	    	//sEffects = db.getDrugEffects();
+	    	//db.close();
 	    	
-	        EditText editText;	        
-	        editText = (EditText)findViewById(R.id.txtEffect);
-	        editText.setText(sEffects);	        	       	        
+	        //EditText editText;	        
+	        //editText = (EditText)findViewById(R.id.txtEffect);
+	        //editText.setText(sEffects);	        	       	        
 	    }
 	}
