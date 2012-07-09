@@ -139,14 +139,14 @@ public class DBHelper {
     public Drug[] getDrugEffects() throws SQLException{
     	Log.i(this.toString(), "getDrugEffects");
     	
-    	String query = "select distinct drug1, drug2, event_name, proportion_reporting_ratio AS likelihood, expected AS severity " +
+    	String sQuery = "select distinct drug1, drug2, event_name, proportion_reporting_ratio AS likelihood, expected AS severity " +
     			" from tRxInteract WHERE EXISTS (SELECT Null FROM tDrugList WHERE Drug = drug1 OR Drug = drug2)";
-    	//query = query + " order by expected";
+    	sQuery = sQuery + " order by drug1, drug2";
 		
     	try{
     		
     		Drug[] drugs = null;
-    		Cursor cEffects = mDb.rawQuery(query, null);
+    		Cursor cEffects = mDb.rawQuery(sQuery, null);
 
     		int iRowCount;
     		iRowCount = cEffects.getCount();
@@ -155,17 +155,33 @@ public class DBHelper {
     		if(iRowCount > 0)
  	        {
         		
-            	drugs = new Drug[iRowCount-1];
+            	drugs = new Drug[iRowCount];
  	            i = 0;
+           	   Log.i(this.toString(), "DrugMax=" + drugs.length);
  	 
  	            while (cEffects.moveToNext())
  	            {
- 	                 drugs[i].setDrug1(cEffects.getString(cEffects.getColumnIndex("drug1")));
- 	                 drugs[i].setDrug2(cEffects.getString(cEffects.getColumnIndex("drug2")));
- 	                 drugs[i].setEffect(cEffects.getString(cEffects.getColumnIndex("event_name"))); 	                 
- 	                 drugs[i].setLikelihood(cEffects.getDouble(cEffects.getColumnIndex("Likelihood")));
- 	                 drugs[i].setSeverity(cEffects.getDouble(cEffects.getColumnIndex("severity")));
-       
+ 	            	
+ 	           	   Log.i(this.toString(), "index=" + i);
+
+ 	            	drugs[i] = new Drug(cEffects.getString(cEffects.getColumnIndex("drug1")),
+ 	            			cEffects.getString(cEffects.getColumnIndex("drug2")), 
+ 	            			cEffects.getString(cEffects.getColumnIndex("event_name")),
+ 	            			cEffects.getDouble(cEffects.getColumnIndex("likelihood")),
+ 	            			cEffects.getDouble(cEffects.getColumnIndex("severity")));
+ 	            	
+ 	                //drugs[i].setDrug1();
+ 	            	// Log.i(this.toString(), i);
+ 	            	 
+ 	                // drugs[i].setDrug2();
+ 	            	//Log.i(this.toString(), "setDrug2");
+ 	                // drugs[i].setEffect();
+ 	            	//Log.i(this.toString(), "event_name");
+ 	                // drugs[i].setLikelihood();
+ 	            	//Log.i(this.toString(), "likelihood");
+ 	                // drugs[i].setSeverity();
+ 	            	//Log.i(this.toString(), "severity");
+
  	                 i++;
  	             }
  	        }
