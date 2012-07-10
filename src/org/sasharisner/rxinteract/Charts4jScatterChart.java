@@ -2,6 +2,9 @@ package org.sasharisner.rxinteract;
 
 import static com.googlecode.charts4j.UrlUtil.normalize;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
@@ -59,8 +62,14 @@ public class Charts4jScatterChart {
 	    	
 	    	Data dPointSize = null;
 	    	Integer iDrugCnt = 0;
+	    	ScatterPlotData plot = null;
 	    	
-	        while (i < drugs.length)
+	    	List<Number> lX = new ArrayList<Number>();	    	
+	    	List<Number> lY = new ArrayList<Number>();
+	    	List<String> lName = new ArrayList<String>();
+	    	List<Number> lSize = new ArrayList<Number>();
+	    	
+	    	while (i < drugs.length)
             {
 	        	sCurrDrugName =  drugs[i].getDrug1()  + " - " + drugs[i].getDrug2();
 	        	
@@ -70,27 +79,34 @@ public class Charts4jScatterChart {
 	        		iDrugCnt++;
 	        		
 	        		//get a random shape and a random color
-	        		iShape = r.nextInt(aShape.length - 0 + 1) + 0;
-	        		iColor = r.nextInt(aColor.length - 0 + 1) + 0;
+	        		iShape = r.nextInt(aShape.length);
+	        		iColor = r.nextInt(aColor.length);
 	        	}
 
-	        	dX = Data.newData(drugs[i].getLikelihood());
-	        	dY = Data.newData(drugs[i].getSeverity());
+	        	lX.add(drugs[i].getLikelihood());
+	        	lY.add(drugs[i].getSeverity());
+	        	lSize.add(10);
+	        	
+	        	lName.add(sCurrDrugName);
 	        	
 		        //point sizes correspond with high severity/high likelihood
-		        dPointSize = Data.newData(10);		        
-        		ScatterPlotData data = Plots.newScatterPlotData(dX, dY, dPointSize);
-
-		        data.setLegend("" + iDrugCnt);
-		        Color diamondColor = aColor[iColor];
-		        data.addShapeMarkers(aShape[iShape], diamondColor, 30);
-		        data.setColor(diamondColor);
-		        chart = GCharts.newScatterPlot(data);	        		    	
-		        
-		        sLastDrugName = sCurrDrugName;		        
+		    	sLastDrugName = sCurrDrugName;		        
                 i++;
              }
-	    	
+	    	        	
+	        dX = Data.newData(lX);
+	        dY = Data.newData(lY);	        
+	        dPointSize = Data.newData(lSize);		    	
+	        
+	    	plot = Plots.newScatterPlotData(dX, dY, dPointSize);
+			
+	        plot.setLegend("" + iDrugCnt);
+	        Color diamondColor = aColor[iColor];
+	        plot.addShapeMarkers(aShape[iShape], diamondColor, 30);
+	        plot.setColor(diamondColor);
+
+	        chart = GCharts.newScatterPlot(plot);
+		       
 	        chart.setSize(300, 329);
 	        chart.setGrid(20, 20, 3, 2);
 

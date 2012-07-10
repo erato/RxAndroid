@@ -140,7 +140,10 @@ public class DBHelper {
     	Log.i(this.toString(), "getDrugEffects");
     	
     	String sQuery = "select distinct drug1, drug2, event_name, proportion_reporting_ratio AS likelihood, expected AS severity " +
-    			" from tRxInteract WHERE EXISTS (SELECT Null FROM tDrugList WHERE Drug = drug1 OR Drug = drug2)";
+    			" from tRxInteract WHERE EXISTS (SELECT Null " +
+    			"	FROM tDrugList d1 INNER JOIN tDrugList d2 " +
+    			"	WHERE (d1.Drug = drug1 AND d2.Drug = drug2) " +
+    			"		OR  (d1.Drug = drug2 AND d2.Drug = drug1))";    	
     	sQuery = sQuery + " order by drug1, drug2";
 		
     	try{
@@ -157,12 +160,12 @@ public class DBHelper {
         		
             	drugs = new Drug[iRowCount];
  	            i = 0;
-           	   Log.i(this.toString(), "DrugMax=" + drugs.length);
+           	   	Log.i(this.toString(), "DrugMax=" + drugs.length);
  	 
  	            while (cEffects.moveToNext())
  	            {
  	            	
- 	           	   Log.i(this.toString(), "index=" + i);
+ 	           	   	Log.i(this.toString(), "index=" + i);
 
  	            	drugs[i] = new Drug(cEffects.getString(cEffects.getColumnIndex("drug1")),
  	            			cEffects.getString(cEffects.getColumnIndex("drug2")), 
