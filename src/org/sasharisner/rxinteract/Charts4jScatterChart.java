@@ -35,7 +35,7 @@ public class Charts4jScatterChart {
 	 			Color.DARKGREEN, Color.DARKMAGENTA, Color.GREEN, Color.GOLD, Color.LAVENDER, Color.LIGHTBLUE, Color.LIGHTGREEN,
 	 			Color.PINK, Color.PURPLE, Color.RED, Color.TAN, Color.YELLOW};
 	 	
-	    public static String getChartData(Context cHelper) {
+	    public static String getChartData(Context cHelper, Ref<String> sEffects) {
 	    	Log.i("Charts", "getChartData");
 	        
 	    	//select the different drugs from the different interactions
@@ -47,12 +47,15 @@ public class Charts4jScatterChart {
 	    	db.close();
 	    		    	
 	    	int i;
+	    	int iMax;
 	    	i = 0;
 	    	
 	    	ScatterPlot chart = null;
 	    	
 	    	String sLastDrugName = "";
 	    	String sCurrDrugName = "";
+	    	String sLocalEffects = "";
+	    	
     		Random r = new Random();
 	    	int iShape = 0;
 	    	int iColor = 0;
@@ -81,6 +84,8 @@ public class Charts4jScatterChart {
 	        		//get a random shape and a random color
 	        		iShape = r.nextInt(aShape.length);
 	        		iColor = r.nextInt(aColor.length);
+	        		
+	        		sLocalEffects = sLocalEffects + "\n" + sCurrDrugName;
 	        	}
 
 	        	lX.add(drugs[i].getLikelihood());
@@ -122,7 +127,8 @@ public class Charts4jScatterChart {
 	        fill.addColorAndOffset(Color.newColor("9BD8F5"), 0);
 	        chart.setAreaFill(fill);
 	        String url = chart.toURLString();
-	       
+	       	        	       
+	        sEffects = new Ref<String>(sLocalEffects);
 	        return normalize( url );
 	    }
 

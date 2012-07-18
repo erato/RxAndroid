@@ -14,20 +14,26 @@ import android.widget.EditText;
 	        super.onCreate( savedInstanceState );
 	        
 	        setContentView(R.layout.charts4jlayout);
-	    	
+	      
+	        Ref<String> sEffects = new Ref<String>("");	        
+	        String sURL = Charts4jScatterChart.getChartData(this, sEffects);
+
 	        WebView webView;	        
 	        webView = (WebView)findViewById(R.id.wvChart);
-	        webView.loadUrl(Charts4jScatterChart.getChartData(this) );
 	        	        
-	        //String sEffects = "";
+	        if (sURL != "")
+	        {
+	        	webView.loadUrl(sURL);
+	        	        		        
+		        //DBHelper db = new DBHelper(this);
+		    	//db.open();
+		    	//sEffects = db.getDrugEffects();
+		    	//db.close();
+		    	EditText editText;	        
+			    editText = (EditText)findViewById(R.id.txtEffect);
+			    editText.setText(sEffects.toString());
+		    }
 	        
-	        //DBHelper db = new DBHelper(this);
-	    	//db.open();
-	    	//sEffects = db.getDrugEffects();
-	    	//db.close();
-	    	
-	        //EditText editText;	        
-	        //editText = (EditText)findViewById(R.id.txtEffect);
-	        //editText.setText(sEffects);	        	       	        
+	       	        	       	        
 	    }
 	}
