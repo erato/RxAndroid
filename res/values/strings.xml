@@ -45,10 +45,6 @@
 	<string name="button_view">View Interactions</string>
 	<color name="white">#ffffff</color>
 	
-	<style name="RxTheme" parent="@android:style/Theme.Holo.Light">
-	    <item name="android:windowBackground">@color/white</item>
-	    <item name="android:colorBackground">@color/white</item>	
-	</style>
 	
 	<string name="DB_VERSION_NUMBER">1</string>
 	<string name="DB_NAME">dbGKB.db</string>
