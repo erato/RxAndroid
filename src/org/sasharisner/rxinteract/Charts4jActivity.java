@@ -35,6 +35,8 @@ import android.widget.EditText;
 		    	EditText editText;	        
 			    editText = (EditText)findViewById(R.id.txtEffect);
 			    editText.setText(sEffects.get().toString());
+			    editText.setEnabled(false);
+			    
 		    }
 	        
 	       	        	       	        

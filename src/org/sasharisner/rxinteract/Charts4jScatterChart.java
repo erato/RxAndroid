@@ -32,7 +32,7 @@ public class Charts4jScatterChart {
 	 			Shape.HORIZONTAL_LINE, Shape.SQUARE, Shape.VERTICAL_LINE_FULL, Shape.VERTICAL_LINE_PARTIAL};
 	 	
 	 	//19 colors
-	 	private static Color[] aColor = {Color.WHITE, Color.AQUA, Color.BLACK, Color.BLUE, Color.CHOCOLATE, Color.CORAL, Color.DARKBLUE, 
+	 	private static Color[] aColor = {Color.WHITE, Color.BLACK, Color.AQUA, Color.BLUE, Color.CHOCOLATE, Color.CORAL, Color.DARKBLUE, 
 	 			Color.DARKGREEN, Color.DARKMAGENTA, Color.GREEN, Color.GOLD, Color.LAVENDER, Color.LIGHTBLUE, Color.LIGHTGREEN,
 	 			Color.PINK, Color.PURPLE, Color.RED, Color.TAN, Color.YELLOW};
 	 	
@@ -48,12 +48,14 @@ public class Charts4jScatterChart {
 	    	db.close();
 	    		    	
 	    	int i = 0;
-	    	double dMax = 0;	    	
+	    	double dMaxX = 0;
+	    	double dMaxY = 0;
+	    	
 	    	ScatterPlot chart = null;
 	    	
 	    	String sLastDrugName = "";
 	    	String sCurrDrugName = "";
-	    	String sLocalEffects = "<b>ADVERSE DRUG EVENTS</b>:\n";
+	    	String sLocalEffects = "ADVERSE DRUG EVENTS:\n";
 	    	
     		Random r = new Random();
 	    	int iShape = 0;
@@ -108,11 +110,11 @@ public class Charts4jScatterChart {
 	        	lX.add(dLikelihood);
 	        	lY.add(dSeverity);
 	        	
-	        	if (dLikelihood > dMax)
-	        		dMax = dLikelihood;
+	        	if (dLikelihood > dMaxX)
+	        		dMaxX = dLikelihood;
 	        	
-	        	if (dSeverity > dMax)
-	        		dMax = dSeverity;
+	        	if (dSeverity > dMaxY)
+	        		dMaxY = dSeverity;
 	        		
 	        	lSize.add(10);
 	        	
@@ -129,8 +131,8 @@ public class Charts4jScatterChart {
 	        
 	    	plot = Plots.newScatterPlotData(dX, dY, dPointSize);
 			
-	        plot.setLegend("" + iDrugCnt);
-	        Color cPlot = aColor[1];
+	        plot.setLegend("Events");
+	        Color cPlot = aColor[0];
 	        plot.addShapeMarkers(aShape[iShape], cPlot, 30);
 	        plot.setColor(cPlot);
 
@@ -140,16 +142,19 @@ public class Charts4jScatterChart {
 	        chart.setSize(300, 329);
 	        chart.setGrid(20, 20, 3, 2);
 
-	        AxisLabels axisLabels = AxisLabelsFactory.newNumericRangeAxisLabels(0, dMax + 1);
-	        axisLabels.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 13, AxisTextAlignment.CENTER));
+	        AxisLabels axisLabelsX = AxisLabelsFactory.newNumericRangeAxisLabels(0, dMaxX + 1);
+	        axisLabelsX.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 14, AxisTextAlignment.CENTER));
 
-	        chart.addXAxisLabels(axisLabels);
-	        chart.addYAxisLabels(axisLabels);
+	        AxisLabels axisLabelsY = AxisLabelsFactory.newNumericRangeAxisLabels(0, dMaxY + 1);
+	        axisLabelsX.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 14, AxisTextAlignment.CENTER));
+
+	        chart.addXAxisLabels(axisLabelsX);
+	        chart.addYAxisLabels(axisLabelsY);
 
 	        chart.setTitle("Drug Interactions", Color.WHITE, 16);
 	        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("4e4e4e")));
 	        LinearGradientFill fill = Fills.newLinearGradientFill(0, Color.newColor("9B7FFF"), 100);
-	        fill.addColorAndOffset(Color.newColor("FFFFFF"), 0);
+	        fill.addColorAndOffset(Color.newColor("9c9c9c"), 0);
 	        chart.setAreaFill(fill);
 	        String url = chart.toURLString();
 	       	        	       
