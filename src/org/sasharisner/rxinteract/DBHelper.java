@@ -143,8 +143,9 @@ public class DBHelper {
     			" from tRxInteract WHERE EXISTS (SELECT Null " +
     			"	FROM tDrugList d1 INNER JOIN tDrugList d2 " +
     			"	WHERE (d1.Drug = drug1 AND d2.Drug = drug2) " +
-    			"		OR  (d1.Drug = drug2 AND d2.Drug = drug1))";    	
-    	sQuery = sQuery + " order by drug1, drug2";
+    			"		OR  (d1.Drug = drug2 AND d2.Drug = drug1)) " +
+    			"    AND event_name <> 'ADVERSE DRUG EFFECT' " +    	
+    			" ORDER BY drug1, drug2";
 		
     	try{
     		

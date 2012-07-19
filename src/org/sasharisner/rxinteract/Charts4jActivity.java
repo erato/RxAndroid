@@ -1,5 +1,7 @@
 package org.sasharisner.rxinteract;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -15,7 +17,8 @@ import android.widget.EditText;
 	        
 	        setContentView(R.layout.charts4jlayout);
 	      
-	        Ref<String> sEffects = new Ref<String>("");	        
+	        
+	        AtomicReference<Object> sEffects = new AtomicReference<Object>("");
 	        String sURL = Charts4jScatterChart.getChartData(this, sEffects);
 
 	        WebView webView;	        
@@ -31,7 +34,7 @@ import android.widget.EditText;
 		    	//db.close();
 		    	EditText editText;	        
 			    editText = (EditText)findViewById(R.id.txtEffect);
-			    editText.setText(sEffects.toString());
+			    editText.setText(sEffects.get().toString());
 		    }
 	        
 	       	        	       	        

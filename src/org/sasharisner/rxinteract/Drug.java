@@ -53,8 +53,8 @@ public class Drug {
 	
 	public Drug(String sDrug1, String sDrug2, String sEffect, double dLikelihood, double dSeverity)
 	{
-		drug1 = sDrug1;
-		drug2 = sDrug2;
+		drug1 = sDrug1.toUpperCase();
+		drug2 = sDrug2.toUpperCase();
 		effect = sEffect;
 		likelihood = dLikelihood;
 		severity = dSeverity;

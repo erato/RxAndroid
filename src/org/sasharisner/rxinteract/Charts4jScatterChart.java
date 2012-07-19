@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 import android.content.Context;
 import android.util.Log;
@@ -30,12 +31,12 @@ public class Charts4jScatterChart {
 	 	private static Shape[] aShape = {Shape.ARROW, Shape.CIRCLE, Shape.CROSS, Shape.DIAMOND, 
 	 			Shape.HORIZONTAL_LINE, Shape.SQUARE, Shape.VERTICAL_LINE_FULL, Shape.VERTICAL_LINE_PARTIAL};
 	 	
-	 	//18 colors
-	 	private static Color[] aColor = {Color.AQUA, Color.BLACK, Color.BLUE, Color.CHOCOLATE, Color.CORAL, Color.DARKBLUE, 
+	 	//19 colors
+	 	private static Color[] aColor = {Color.WHITE, Color.AQUA, Color.BLACK, Color.BLUE, Color.CHOCOLATE, Color.CORAL, Color.DARKBLUE, 
 	 			Color.DARKGREEN, Color.DARKMAGENTA, Color.GREEN, Color.GOLD, Color.LAVENDER, Color.LIGHTBLUE, Color.LIGHTGREEN,
 	 			Color.PINK, Color.PURPLE, Color.RED, Color.TAN, Color.YELLOW};
 	 	
-	    public static String getChartData(Context cHelper, Ref<String> sEffects) {
+	    public static String getChartData(Context cHelper, AtomicReference<Object> sEffects) {
 	    	Log.i("Charts", "getChartData");
 	        
 	    	//select the different drugs from the different interactions
@@ -46,19 +47,20 @@ public class Charts4jScatterChart {
 	    	Drug[] drugs = db.getDrugEffects();
 	    	db.close();
 	    		    	
-	    	int i;
-	    	int iMax;
-	    	i = 0;
-	    	
+	    	int i = 0;
+	    	double dMax = 0;	    	
 	    	ScatterPlot chart = null;
 	    	
 	    	String sLastDrugName = "";
 	    	String sCurrDrugName = "";
-	    	String sLocalEffects = "";
+	    	String sLocalEffects = "<b>ADVERSE DRUG EVENTS</b>:\n";
 	    	
     		Random r = new Random();
 	    	int iShape = 0;
-	    	int iColor = 0;
+	    	//int iColor = 0;
+	    	double dLikelihood = 0;
+	    	double dSeverity = 0;
+	    	String sEffect = "";
 	    	
 	    	Data dX = null;
 	    	Data dY = null;
@@ -83,13 +85,35 @@ public class Charts4jScatterChart {
 	        		
 	        		//get a random shape and a random color
 	        		iShape = r.nextInt(aShape.length);
-	        		iColor = r.nextInt(aColor.length);
+	        		//iColor = r.nextInt(aColor.length);
 	        		
-	        		sLocalEffects = sLocalEffects + "\n" + sCurrDrugName;
+	        		if (iDrugCnt > 1)
+	        			sLocalEffects = sLocalEffects + "\n";
+	        		
+	        		sLocalEffects = sLocalEffects + iDrugCnt.toString() + ") " + sCurrDrugName + "\n";	        	
+	        	}
+	        	else if (i != (drugs.length-1))
+	        	{
+	        		sLocalEffects = sLocalEffects + ", ";
 	        	}
 
-	        	lX.add(drugs[i].getLikelihood());
-	        	lY.add(drugs[i].getSeverity());
+	        	
+	        	dLikelihood = drugs[i].getLikelihood();
+	        	dSeverity = drugs[i].getSeverity();
+	        	sEffect = drugs[i].getEffect();
+	        	
+	        	
+	        	sLocalEffects = sLocalEffects + drugs[i].getEffect();	        	
+
+	        	lX.add(dLikelihood);
+	        	lY.add(dSeverity);
+	        	
+	        	if (dLikelihood > dMax)
+	        		dMax = dLikelihood;
+	        	
+	        	if (dSeverity > dMax)
+	        		dMax = dSeverity;
+	        		
 	        	lSize.add(10);
 	        	
 	        	lName.add(sCurrDrugName);
@@ -106,29 +130,30 @@ public class Charts4jScatterChart {
 	    	plot = Plots.newScatterPlotData(dX, dY, dPointSize);
 			
 	        plot.setLegend("" + iDrugCnt);
-	        Color diamondColor = aColor[iColor];
-	        plot.addShapeMarkers(aShape[iShape], diamondColor, 30);
-	        plot.setColor(diamondColor);
+	        Color cPlot = aColor[1];
+	        plot.addShapeMarkers(aShape[iShape], cPlot, 30);
+	        plot.setColor(cPlot);
 
 	        chart = GCharts.newScatterPlot(plot);
 		       
+	        
 	        chart.setSize(300, 329);
 	        chart.setGrid(20, 20, 3, 2);
 
-	        AxisLabels axisLabels = AxisLabelsFactory.newNumericRangeAxisLabels(0, 100);
+	        AxisLabels axisLabels = AxisLabelsFactory.newNumericRangeAxisLabels(0, dMax + 1);
 	        axisLabels.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 13, AxisTextAlignment.CENTER));
 
 	        chart.addXAxisLabels(axisLabels);
 	        chart.addYAxisLabels(axisLabels);
 
 	        chart.setTitle("Drug Interactions", Color.WHITE, 16);
-	        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("2F3E3E")));
-	        LinearGradientFill fill = Fills.newLinearGradientFill(0, Color.newColor("3783DB"), 100);
-	        fill.addColorAndOffset(Color.newColor("9BD8F5"), 0);
+	        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("4e4e4e")));
+	        LinearGradientFill fill = Fills.newLinearGradientFill(0, Color.newColor("9B7FFF"), 100);
+	        fill.addColorAndOffset(Color.newColor("FFFFFF"), 0);
 	        chart.setAreaFill(fill);
 	        String url = chart.toURLString();
 	       	        	       
-	        sEffects = new Ref<String>(sLocalEffects);
+	        sEffects.set(sLocalEffects);
 	        return normalize( url );
 	    }
 
