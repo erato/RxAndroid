@@ -33,17 +33,19 @@ public class Charts4jScatterChart {
 	 			Color.DARKGREEN, Color.DARKMAGENTA, Color.GREEN, Color.GOLD, Color.LAVENDER, Color.LIGHTBLUE, Color.LIGHTGREEN,
 	 			Color.PINK, Color.PURPLE, Color.RED, Color.TAN, Color.YELLOW};
 	 	
+	 	//this function returns the chart URL and the effects string
 	    public static String getChartData(Context cHelper, AtomicReference<Object> sEffects) {
 	    	Log.i("Charts", "getChartData");
 	        
+	    	//get the data for the chart from the database helper class
 	    	//select the different drugs from the different interactions
-	    	//select drug1, drug2, effect, severity, & likelihood
-	    	
+	    	//select drug1, drug2, effect, severity, & likelihood	    	
 	    	DBHelper db = new DBHelper(cHelper);
 	    	db.open();	    
 	    	Drug[] drugs = db.getDrugEffects();
 	    	db.close();
 	    		 
+	    	//there are no drug interactions, so return
 	    	if (drugs == null)
 	    			return "";
 	    	
@@ -71,6 +73,7 @@ public class Charts4jScatterChart {
 	    	Integer iDrugCnt = 0;
 	    	ScatterPlotData plot = null;
 	    	
+	    	//x data list, y data list, name data lise, and size data list
 	    	List<Number> lX = new ArrayList<Number>();	    	
 	    	List<Number> lY = new ArrayList<Number>();
 	    	List<String> lName = new ArrayList<String>();
@@ -79,6 +82,7 @@ public class Charts4jScatterChart {
 	    	
 	    	while (i < drugs.length)
             {
+	    		//change the current drug name to the combination of drug1 - drug2
 	        	sCurrDrugName =  drugs[i].getDrug1()  + " - " + drugs[i].getDrug2();
 	        	
 	        	//new Drug-Drug combination
@@ -90,9 +94,11 @@ public class Charts4jScatterChart {
 	        		//iShape = r.nextInt(aShape.length);
 	        		//iColor = r.nextInt(aColor.length);
 	        		
+	        		//add a line break before the line if we are after the first drug combination
 	        		if (iDrugCnt > 1)
 	        			sLocalEffects = sLocalEffects + "\n";
 	        		
+	        		//add the effects to the string listing, with the order number
 	        		sLocalEffects = sLocalEffects + iDrugCnt.toString() + ") " + sCurrDrugName + "\n";	        	
 	        	}
 	        	else if (i != (drugs.length-1))
@@ -100,66 +106,84 @@ public class Charts4jScatterChart {
 	        		sLocalEffects = sLocalEffects + ", ";
 	        	}
 
-	        	
+	        	//get the likelihood, severity, and effect from the class arrays
 	        	dLikelihood = drugs[i].getLikelihood();
 	        	dSeverity = drugs[i].getSeverity();
 	        	sEffect = drugs[i].getEffect();
 	        	
-	        	
+	        	//add the effect to the effect string
 	        	sLocalEffects = sLocalEffects + sEffect;	        	
 
+	        	//add the x & y coordinates to the chart list
 	        	lX.add(dLikelihood);
 	        	lY.add(dSeverity);
 	        	
+	        	//reset the max if the x or y values are greater than the max
 	        	if (dLikelihood > dMaxX)
 	        		dMaxX = dLikelihood;
 	        	
 	        	if (dSeverity > dMaxY)
 	        		dMaxY = dSeverity;
 	        		
+	        	//set the chart plot size equal to the likelihood (adds some interesting contrast)
 	        	lSize.add(dLikelihood);
 	        	
+	        	//add the current drug name to the name list
 	        	lName.add(sCurrDrugName);
 	        	
-		        //point sizes correspond with high severity/high likelihood
+		        //now set the last drug name to the current drug so we can determine if we're onto a new drug-drug combination
 		    	sLastDrugName = sCurrDrugName;		        
                 i++;
              }
-	    	        	
+	    	    
+	    	//finally, add the lists to x & y & point size data types
 	        dX = Data.newData(lX);
 	        dY = Data.newData(lY);	        
 	        dPointSize = Data.newData(lSize);		    	
 	        
+	        //create a new scatter point with all the plots
 	    	plot = Plots.newScatterPlotData(dX, dY, dPointSize);
 			
+	    	//set the legend name
 	        plot.setLegend("Events");
+	        //set the color of the plot points to the first in the color array
 	        Color cPlot = aColor[0];
+	        //set the shape of the plot points to the first in the shape array
 	        plot.addShapeMarkers(aShape[0], cPlot, 30);
+	        //set the color of the plot points
 	        plot.setColor(cPlot);
 
-	        chart = GCharts.newScatterPlot(plot);
-		       
-	        
+	        //create the chart 
+	        chart = GCharts.newScatterPlot(plot);		       
+	        //set the chart size and the grid sizes
 	        chart.setSize(300, 329);
 	        chart.setGrid(20, 20, 3, 2);
 
+	        //label and color the x axis
 	        AxisLabels axisLabelsX = AxisLabelsFactory.newNumericRangeAxisLabels(0, dMaxX + 1);
-	        axisLabelsX.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 14, AxisTextAlignment.CENTER));
+	        axisLabelsX.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 12, AxisTextAlignment.CENTER));
 
+	        //label and color the y axis
 	        AxisLabels axisLabelsY = AxisLabelsFactory.newNumericRangeAxisLabels(0, dMaxY + 1);
-	        axisLabelsX.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 14, AxisTextAlignment.CENTER));
+	        axisLabelsX.setAxisStyle(AxisStyle.newAxisStyle(Color.WHITE, 12, AxisTextAlignment.CENTER));
 
+	        //now add the x and y axis labels to the chart
 	        chart.addXAxisLabels(axisLabelsX);
 	        chart.addYAxisLabels(axisLabelsY);
 
+	        //set the title of the chart, the background color, fill the gradient background, and the area color around the chart	        
 	        chart.setTitle("Drug Interactions", Color.WHITE, 16);
 	        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("4e4e4e")));
 	        LinearGradientFill fill = Fills.newLinearGradientFill(0, Color.newColor("9B7FFF"), 100);
 	        fill.addColorAndOffset(Color.newColor("9c9c9c"), 0);
 	        chart.setAreaFill(fill);
+	        //let's get this url of the chart
 	        String url = chart.toURLString();
-	       	        	       
+
+	        //set the reference string to the effects string we've built here
 	        sEffects.set(sLocalEffects);
+	        
+	        //return the url so we can display the chart
 	        return normalize( url );
 	    }
 

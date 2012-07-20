@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-
+//this class queries and copies the sqlite database
 public class DBHelper {
 
     private static final String TAG = "DBHelper";
@@ -28,21 +28,25 @@ public class DBHelper {
     public DBHelper(Context context) {
         this.adapterContext = context;
         
+        //get the db name and version from strings.xml
         DB_NAME = context.getString(R.string.DB_NAME);
    	   	DB_VERSION = Integer.parseInt(context.getString(R.string.DB_VERSION_NUMBER));
     }
 
+    //let's open or create the db
     public DBHelper open() throws SQLException {
         mDbHelper = new DatabaseHelper(adapterContext);
 
     	Log.i(this.toString(), "DBHelper open");
 
+    	//first let's try to create the database
         try {
             mDbHelper.createDataBase();
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
 
+        //now let's open it
         try {
             mDbHelper.openDataBase();
         } catch (SQLException sqle) {
@@ -51,12 +55,7 @@ public class DBHelper {
         return this;
     }
  
-    public Cursor ExampleSelect(String myVariable)
-    {
-        String query = "SELECT locale, ? FROM android_metadata";
-        return mDb.rawQuery(query, new String[]{myVariable});
-    }
-    
+    //get all the drugs for the autocompletelist box
     public String[] getAllDrugs() throws SQLException
     {
     	Log.i(this.toString(), "getAllDrugs");
@@ -67,8 +66,10 @@ public class DBHelper {
 			" order by drug";
     	
     	try   	{
+    		//let's open this cursor to query the database
     		Cursor cDrugs = mDb.rawQuery(query, null);
     		
+    		//if we have drugs, then populate the string array of drubs
     		 if(cDrugs.getCount() >0)
     	        {
     	            String[] str = new String[cDrugs.getCount()];
@@ -83,6 +84,7 @@ public class DBHelper {
     	        }
     	        else
     	        {
+    	        	//if there are none, return an empty string array
     	            return new String[] {};
     	        }
     	} catch (SQLException eSQL) {
@@ -92,10 +94,14 @@ public class DBHelper {
        
     }
     
+    
+    //this is called when a user selects a drug from the drop-down list
     public void InsertDrugSelection(String sDrug) throws SQLException {
+    	
         String command = "INSERT INTO tDrugList VALUES ('" + sDrug + "')";
         
         try{
+        	//insert the drug name into the table that keeps a listing of drugs selected
         	mDb.execSQL(command);
         }
 	    catch (SQLException sqle) {
@@ -103,6 +109,7 @@ public class DBHelper {
 	    }
     }
 
+    //this returns the list of selected drugs
     public String[] getDrugSelection() throws SQLException
     {
     	Log.i(this.toString(), "getDrugSelection");
@@ -112,6 +119,7 @@ public class DBHelper {
     	try   	{
     		Cursor cDrugs = mDb.rawQuery(query, null);
     		
+    		//if there are drugs selected, then return them in a string array
     		 if(cDrugs.getCount() >0)
     	        {
     	            String[] str = new String[cDrugs.getCount()];
@@ -126,6 +134,7 @@ public class DBHelper {
     	        }
     	        else
     	        {
+    	        	//if there are none, return an empty string array
     	            return new String[] {};
     	        }
     	} catch (SQLException eSQL) {
@@ -135,7 +144,7 @@ public class DBHelper {
        
     }
     
-        
+    //this returns the list of drug effects, likelihoods, and severities, along with the selected drug combinations
     public Drug[] getDrugEffects() throws SQLException{
     	Log.i(this.toString(), "getDrugEffects");
     	
@@ -149,6 +158,7 @@ public class DBHelper {
 		
     	try{
     		
+    		//this drug class stores all the drug information
     		Drug[] drugs = null;
     		Cursor cEffects = mDb.rawQuery(sQuery, null);
 
@@ -156,40 +166,33 @@ public class DBHelper {
     		iRowCount = cEffects.getCount();
     		int i;
 
+    		//if we have drug interactions
     		if(iRowCount > 0)
  	        {
         		
+    			//let's add one to our array so we can populated it
             	drugs = new Drug[iRowCount];
  	            i = 0;
            	   	Log.i(this.toString(), "DrugMax=" + drugs.length);
  	 
+           	   	//loop through the db cursor
  	            while (cEffects.moveToNext())
  	            {
  	            	
  	           	   	Log.i(this.toString(), "index=" + i);
-
+ 	           	   	
+ 	           	   	//pass the db info to the drug class and create a new drug array item
  	            	drugs[i] = new Drug(cEffects.getString(cEffects.getColumnIndex("drug1")),
  	            			cEffects.getString(cEffects.getColumnIndex("drug2")), 
  	            			cEffects.getString(cEffects.getColumnIndex("event_name")),
  	            			cEffects.getDouble(cEffects.getColumnIndex("likelihood")),
  	            			cEffects.getDouble(cEffects.getColumnIndex("severity")));
  	            	
- 	                //drugs[i].setDrug1();
- 	            	// Log.i(this.toString(), i);
- 	            	 
- 	                // drugs[i].setDrug2();
- 	            	//Log.i(this.toString(), "setDrug2");
- 	                // drugs[i].setEffect();
- 	            	//Log.i(this.toString(), "event_name");
- 	                // drugs[i].setLikelihood();
- 	            	//Log.i(this.toString(), "likelihood");
- 	                // drugs[i].setSeverity();
- 	            	//Log.i(this.toString(), "severity");
-
  	                 i++;
  	             }
  	        }
 
+    		//return this drug class
             return drugs;
 
 	    } catch (SQLException eSQL) {
@@ -201,17 +204,21 @@ public class DBHelper {
     public void close() {
     	Log.i(this.toString(), "Close");
 
+    	//close the database
         mDbHelper.close();
     }
 
+    //this clears the list of selected drugs
     public void ClearDrugList()
     {
     	Log.i(this.toString(), "ClearDrugList");
 
+    	//just clear the table
         String command = "DELETE FROM tDrugList";
         mDb.execSQL(command);
     }
     
+    //this helper copies the sqlite db file from the assets folder into the application directory for use in the app
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         Context helperContext;
@@ -225,6 +232,7 @@ public class DBHelper {
         public void onCreate(SQLiteDatabase db) {
         }
 
+        //called when the database is upgraded to a new version
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(TAG, "Upgrading database!!!!!");
@@ -232,6 +240,7 @@ public class DBHelper {
             onCreate(db);
         }
 
+        //checks if the db exists and copies it to the app directory if doesn't exit
         public void createDataBase() throws IOException {
             boolean dbExist = checkDataBase();
             if (dbExist) {
@@ -239,6 +248,7 @@ public class DBHelper {
                 try {
                     copyDataBase();
                 } catch (IOException e) {
+                	//delete the database if the copy failed so to prevent errors
                 	File f = new File(DB_PATH + DB_NAME);
                     if (f.exists()) {
                     	f.delete();
@@ -248,29 +258,31 @@ public class DBHelper {
             }
         }
 
+        //gets the database for use
         public SQLiteDatabase getDatabase() {
             String sPath = DB_PATH + DB_NAME;
             return SQLiteDatabase.openDatabase(sPath, null,
                     SQLiteDatabase.OPEN_READONLY);
         }
 
+        //check if the database exists
         private boolean checkDataBase() {
         	String sPath = DB_PATH + DB_NAME;
         	return new File(sPath).exists();
         }
 
+        //this function copies the database
         private void copyDataBase() throws IOException {
 
-            // Open your local db as the input stream
+            // Open your local db as the input stream        	
+        	String sAssetName = DB_NAME; 
         	
-        	String sAssetName = DB_NAME; //.replace(".db", ".jpeg");
-        	
+        	//create an input stream to the database in the assets folder
             InputStream myInput = helperContext.getAssets().open(sAssetName);
 
             // Path to the just created empty db
             String outFileName = DB_PATH + DB_NAME;
 
-            //TODO:  If this fails, delete this database..
             this.getReadableDatabase();
             File f = new File(DB_PATH);
             if (!f.exists()) {
@@ -293,6 +305,7 @@ public class DBHelper {
             myInput.close();
         }
 
+        //this function opens the database or calls the function to create it if it doesn't exist
         public void openDataBase() throws SQLException {
             // Open the database
             String sPath = DB_PATH + DB_NAME;
@@ -300,6 +313,7 @@ public class DBHelper {
                     SQLiteDatabase.OPEN_READWRITE);
         }
 
+        //close the database
         @Override
         public synchronized void close() {
 

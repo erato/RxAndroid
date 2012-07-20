@@ -1,5 +1,7 @@
 package org.sasharisner.rxinteract;
 
+//this class stores drug interaction information
+
 public class Drug {
 	private String drug1;
 	private String drug2;		
@@ -49,8 +51,7 @@ public class Drug {
 	
 	
 	
-	// constructor
-	
+	// constructor	
 	public Drug(String sDrug1, String sDrug2, String sEffect, double dLikelihood, double dSeverity)
 	{
 		drug1 = sDrug1.toUpperCase();
