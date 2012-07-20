@@ -16,29 +16,33 @@ import android.widget.EditText;
 	        super.onCreate( savedInstanceState );
 	        
 	        setContentView(R.layout.charts4jlayout);
-	      
-	        
+	      	        
 	        AtomicReference<Object> sEffects = new AtomicReference<Object>("");
 	        String sURL = Charts4jScatterChart.getChartData(this, sEffects);
 
-	        WebView webView;	        
-	        webView = (WebView)findViewById(R.id.wvChart);
-	        	        
+	  	        	       
 	        if (sURL != "")
 	        {
+	            WebView webView;	        
+		        webView = (WebView)findViewById(R.id.wvChart);
 	        	webView.loadUrl(sURL);
 	        	        		        
 		        //DBHelper db = new DBHelper(this);
 		    	//db.open();
 		    	//sEffects = db.getDrugEffects();
 		    	//db.close();
-		    	EditText editText;	        
-			    editText = (EditText)findViewById(R.id.txtEffect);
-			    editText.setText(sEffects.get().toString());
-			    editText.setEnabled(false);
+		    	
+			    
 			    
 		    }
+	        else
+	        {
+	        	sEffects.set("No adverse events.");
+	        }
 	        
-	       	        	       	        
+	        EditText editText;	        
+		    editText = (EditText)findViewById(R.id.txtEffect);
+		    editText.setText(sEffects.get().toString());
+		    editText.setEnabled(false);
 	    }
 	}

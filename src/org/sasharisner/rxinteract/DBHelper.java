@@ -139,7 +139,7 @@ public class DBHelper {
     public Drug[] getDrugEffects() throws SQLException{
     	Log.i(this.toString(), "getDrugEffects");
     	
-    	String sQuery = "select distinct drug1, drug2, event_name, proportion_reporting_ratio AS likelihood, expected AS severity " +
+    	String sQuery = "select distinct drug1, drug2, event_name, proportion_reporting_ratio AS likelihood, observed * 100.0 AS severity " +
     			" from tRxInteract WHERE EXISTS (SELECT Null " +
     			"	FROM tDrugList d1 INNER JOIN tDrugList d2 " +
     			"	WHERE (d1.Drug = drug1 AND d2.Drug = drug2) " +

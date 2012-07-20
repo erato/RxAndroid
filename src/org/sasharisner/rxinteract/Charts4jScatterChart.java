@@ -3,9 +3,7 @@ package org.sasharisner.rxinteract;
 import static com.googlecode.charts4j.UrlUtil.normalize;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.content.Context;
@@ -26,13 +24,12 @@ import com.googlecode.charts4j.ScatterPlotData;
 import com.googlecode.charts4j.Shape;
 
 public class Charts4jScatterChart {
-	
-	    //8 shapes
-	 	private static Shape[] aShape = {Shape.ARROW, Shape.CIRCLE, Shape.CROSS, Shape.DIAMOND, 
+
+		//the theory was to alternate random shapes with colors for each of the different drug interaction combinations.  however, this chart doesn't support different shapes or colors
+	 	private static Shape[] aShape = {Shape.CIRCLE, Shape.ARROW, Shape.CROSS, Shape.DIAMOND, 
 	 			Shape.HORIZONTAL_LINE, Shape.SQUARE, Shape.VERTICAL_LINE_FULL, Shape.VERTICAL_LINE_PARTIAL};
 	 	
-	 	//19 colors
-	 	private static Color[] aColor = {Color.WHITE, Color.BLACK, Color.AQUA, Color.BLUE, Color.CHOCOLATE, Color.CORAL, Color.DARKBLUE, 
+	 	private static Color[] aColor = {Color.RED, Color.WHITE, Color.BLACK, Color.AQUA, Color.BLUE, Color.CHOCOLATE, Color.CORAL, Color.DARKBLUE, 
 	 			Color.DARKGREEN, Color.DARKMAGENTA, Color.GREEN, Color.GOLD, Color.LAVENDER, Color.LIGHTBLUE, Color.LIGHTGREEN,
 	 			Color.PINK, Color.PURPLE, Color.RED, Color.TAN, Color.YELLOW};
 	 	
@@ -46,7 +43,10 @@ public class Charts4jScatterChart {
 	    	db.open();	    
 	    	Drug[] drugs = db.getDrugEffects();
 	    	db.close();
-	    		    	
+	    		 
+	    	if (drugs == null)
+	    			return "";
+	    	
 	    	int i = 0;
 	    	double dMaxX = 0;
 	    	double dMaxY = 0;
@@ -57,12 +57,12 @@ public class Charts4jScatterChart {
 	    	String sCurrDrugName = "";
 	    	String sLocalEffects = "ADVERSE DRUG EVENTS:\n";
 	    	
-    		Random r = new Random();
-	    	int iShape = 0;
+    		//Random r = new Random();
+	    	//int iShape = 0;
 	    	//int iColor = 0;
+	    	String sEffect = "";
 	    	double dLikelihood = 0;
 	    	double dSeverity = 0;
-	    	String sEffect = "";
 	    	
 	    	Data dX = null;
 	    	Data dY = null;
@@ -76,6 +76,7 @@ public class Charts4jScatterChart {
 	    	List<String> lName = new ArrayList<String>();
 	    	List<Number> lSize = new ArrayList<Number>();
 	    	
+	    	
 	    	while (i < drugs.length)
             {
 	        	sCurrDrugName =  drugs[i].getDrug1()  + " - " + drugs[i].getDrug2();
@@ -86,7 +87,7 @@ public class Charts4jScatterChart {
 	        		iDrugCnt++;
 	        		
 	        		//get a random shape and a random color
-	        		iShape = r.nextInt(aShape.length);
+	        		//iShape = r.nextInt(aShape.length);
 	        		//iColor = r.nextInt(aColor.length);
 	        		
 	        		if (iDrugCnt > 1)
@@ -105,7 +106,7 @@ public class Charts4jScatterChart {
 	        	sEffect = drugs[i].getEffect();
 	        	
 	        	
-	        	sLocalEffects = sLocalEffects + drugs[i].getEffect();	        	
+	        	sLocalEffects = sLocalEffects + sEffect;	        	
 
 	        	lX.add(dLikelihood);
 	        	lY.add(dSeverity);
@@ -116,7 +117,7 @@ public class Charts4jScatterChart {
 	        	if (dSeverity > dMaxY)
 	        		dMaxY = dSeverity;
 	        		
-	        	lSize.add(10);
+	        	lSize.add(dLikelihood);
 	        	
 	        	lName.add(sCurrDrugName);
 	        	
@@ -133,7 +134,7 @@ public class Charts4jScatterChart {
 			
 	        plot.setLegend("Events");
 	        Color cPlot = aColor[0];
-	        plot.addShapeMarkers(aShape[iShape], cPlot, 30);
+	        plot.addShapeMarkers(aShape[0], cPlot, 30);
 	        plot.setColor(cPlot);
 
 	        chart = GCharts.newScatterPlot(plot);
