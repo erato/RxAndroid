@@ -57,6 +57,7 @@
 	<string name="new_series">New series</string>
 	
 	<color name="blue">#0000ff</color>
+	<color name="purple">#9B7FFF</color>
 
 	<string name="chart_title">Rx Interact</string>
 	<string name="x_label">Drug</string>

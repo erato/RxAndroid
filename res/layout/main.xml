@@ -4,11 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp" >
-
+	<Button
+        android:id="@+id/btnView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_view"
+        android:visibility="gone"
+        >
+    </Button>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
+ 	
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,12 +47,6 @@
         android:layout_width="match_parent"
         android:layout_height="325dp" />
 
-    <Button
-        android:id="@+id/btnView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_view"
-        android:visibility="gone" >
-    </Button>
+   
 
 </LinearLayout>
