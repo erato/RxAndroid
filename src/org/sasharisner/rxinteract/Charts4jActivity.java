@@ -5,11 +5,8 @@ package org.sasharisner.rxinteract;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.EditText;
 
