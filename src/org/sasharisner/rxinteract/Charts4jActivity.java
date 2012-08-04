@@ -5,7 +5,11 @@ package org.sasharisner.rxinteract;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.EditText;
 
@@ -22,17 +26,25 @@ import android.widget.EditText;
 	        //since java doesn't allow pass by reference, doing it through an atomicreferenceobject
 	        AtomicReference<Object> sEffects = new AtomicReference<Object>("");
 	        
+	        
+	        WebView webView;	
+	        webView = (WebView)findViewById(R.id.wvChart);		        		              
+	        
+	        DisplayMetrics displaymetrics = new DisplayMetrics();
+	        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+	        int iwidth = displaymetrics.widthPixels - (displaymetrics.widthPixels/3 + 5);
+	        
+	        //DisplayMetrics displaymetrics = new DisplayMetrics();
+	        //getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+	        int iheight = 329;
 	        //call the chart class to get the chart url and the effects string
-	        String sURL = Charts4jScatterChart.getChartData(this, sEffects);
+	        String sURL = Charts4jScatterChart.getChartData(this, sEffects, iheight, iwidth);
 
 	  	        	       
 	        if (sURL != "")
 	        {
-	        	//this is where the chart is populated with the URL
-	            WebView webView;	        
-		        webView = (WebView)findViewById(R.id.wvChart);
+	        	//this is where the chart is populated with the URL	              	        
 	        	webView.loadUrl(sURL);
-
 		    }
 	        else
 	        {
@@ -46,4 +58,6 @@ import android.widget.EditText;
 		    editText.setText(sEffects.get().toString());
 		    editText.setEnabled(false);
 	    }
+
+	    
 	}

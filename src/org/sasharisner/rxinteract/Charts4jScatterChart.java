@@ -34,7 +34,7 @@ public class Charts4jScatterChart {
 	 			Color.PINK, Color.PURPLE, Color.RED, Color.TAN, Color.YELLOW};
 	 	
 	 	//this function returns the chart URL and the effects string
-	    public static String getChartData(Context cHelper, AtomicReference<Object> sEffects) {
+	    public static String getChartData(Context cHelper, AtomicReference<Object> sEffects, int iheight, int iwidth) {
 	    	Log.i("Charts", "getChartData");
 	        
 	    	//get the data for the chart from the database helper class
@@ -154,9 +154,9 @@ public class Charts4jScatterChart {
 	        plot.setColor(cPlot);
 
 	        //create the chart 
-	        chart = GCharts.newScatterPlot(plot);		       
+	        chart = GCharts.newScatterPlot(plot);	
 	        //set the chart size and the grid sizes
-	        chart.setSize(300, 329);
+	        chart.setSize(iwidth, iheight);
 	        chart.setGrid(20, 20, 3, 2);
 
 	        //label and color the x axis
@@ -172,7 +172,7 @@ public class Charts4jScatterChart {
 	        chart.addYAxisLabels(axisLabelsY);
 
 	        //set the title of the chart, the background color, fill the gradient background, and the area color around the chart	        
-	        chart.setTitle("Drug Interactions", Color.WHITE, 16);
+	        chart.setTitle("Drug Interactions", Color.WHITE, 18);
 	        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("4e4e4e")));
 	        LinearGradientFill fill = Fills.newLinearGradientFill(0, Color.newColor("9B7FFF"), 100);
 	        fill.addColorAndOffset(Color.newColor("9c9c9c"), 0);
