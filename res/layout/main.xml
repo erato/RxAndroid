@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:background="@android:drawable/title_bar"
         android:text="@string/search_instructions"
-        android:textColor="?android:textColorPrimary"
+        android:textColor="@color/white"
         android:textSize="17dp" />
 
     <ListView

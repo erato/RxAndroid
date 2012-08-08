@@ -30,10 +30,17 @@ import android.widget.EditText;
 	        DisplayMetrics displaymetrics = new DisplayMetrics();
 	        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 	        int iwidth = displaymetrics.widthPixels - (displaymetrics.widthPixels/3 + 5);
+	        int iheight = (int) (displaymetrics.heightPixels / getResources().getDisplayMetrics().density);
+	        
+	        if (iheight > 329)
+	        	iheight = 329;
+	        else if (iheight < 329)
+	        	iheight = iheight - 50;
+	        
+	        iwidth = (int) (displaymetrics.widthPixels / getResources().getDisplayMetrics().density);
 	        
 	        //DisplayMetrics displaymetrics = new DisplayMetrics();
 	        //getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-	        int iheight = 329;
 	        //call the chart class to get the chart url and the effects string
 	        String sURL = Charts4jScatterChart.getChartData(this, sEffects, iheight, iwidth);
 

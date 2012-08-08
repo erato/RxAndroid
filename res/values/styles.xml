@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="RxTheme" parent="@android:style/Theme.Holo.Light">
+    <style name="RxTheme" parent="@android:style/Theme.Light">
 	    <item name="android:windowBackground">@color/white</item>
 	    <item name="android:colorBackground">@color/white</item>
 	    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewLight</item>
